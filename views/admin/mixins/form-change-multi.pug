@@ -1,0 +1,23 @@
+mixin formChangeMulti()
+    form(
+        method="POST"
+        action
+        form-change-multi
+        data-path=`${prefixAdmin}/products/change-multi?_method=PATCH`
+    ) 
+        .d-flex.align-items-start
+            .form-group
+                select(class="form-control" name="type")
+                    option(disabled selected) -- Chọn hành động --
+                    option(value="active") Hoạt động 
+                    option(value="inactive") Dừng hoạt động
+                    option(value="delete-all") Xóa tất cả
+                    option(value="change-position") Thay đổi vị trí
+            .form-group 
+                input(
+                    type="text"
+                    name="ids"
+                    value=""
+                    class="form-control d-none"
+                )
+            button(type="submit" class="btn btn-primary") Áp dụng
