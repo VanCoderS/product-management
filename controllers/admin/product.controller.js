@@ -99,6 +99,20 @@ module.exports.changeMulti = async (req, res) => {
         `Thay đổi vị trí ${ids.length} sản phẩm thành công!`
       );
       break;
+    case 'change-status-delete':
+      await Product.updateMany({ _id: { $in: ids } }, { deleted: false });
+      req.flash(
+        'success',
+        `Thay đổi trạng thái deleted của ${ids.length} sản phẩm thành công`
+      );
+      break;
+    case 'delete-all-forever':
+      await Product.deleteMany({ _id: { $in: ids } });
+      req.flash(
+        'success',
+        `Đã xóa vĩnh viễn ${ids.length} sản phẩm thành công`
+      );
+      break;
     default:
       break;
   }
@@ -207,6 +221,68 @@ module.exports.detailItem = async (req, res) => {
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
+};
+
+module.exports.recyclingBin = async (req, res) => {
+  const filterStatus = filterStatusHelper(req.query);
+
+  let find = {
+    deleted: true,
+  };
+
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+
+  const objectSearch = searchHelper(req.query);
+  if (objectSearch.regex) {
+    find.title = objectSearch.regex;
+  }
+
+  const countProducts = await Product.countDocuments(find);
+  let objectPagination = paginationHelper(
+    {
+      currentPage: 1,
+      limitItems: 4,
+    },
+    req.query,
+    countProducts
+  );
+
+  let sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = 'desc';
+  }
+
+  const products = await Product.find(find)
+    .sort(sort)
+    .limit(objectPagination.limitItems)
+    .skip(objectPagination.skip);
+
+  // console.log(products);
+  res.render('admin/pages/products/recycling-bin', {
+    pageTitle: 'Khôi phục sản phẩm',
+    products: products,
+    filterStatus: filterStatus,
+    keyword: objectSearch.keyword,
+    pagination: objectPagination,
+  });
+};
+
+module.exports.changeStatusDelete = async (req, res) => {
+  const id = req.params.id;
+  await Product.updateOne({ _id: id }, { deleted: false });
+  req.flash('success', 'Thay đổi trạng thái deleted sản phẩm thành công');
+  res.redirect('back');
+};
+
+module.exports.deleteItemForever = async (req, res) => {
+  const id = req.params.id;
+  await Product.deleteOne({ _id: id });
+  req.flash('success', 'Đã xóa vĩnh viễn sản phẩm thành công');
+  res.redirect('back');
 };
 
 module.exports.backupDelete = async (req, res) => {

@@ -1,4 +1,4 @@
-mixin formChangeMulti()
+mixin formChangeMulti(backup)
     form(
         method="POST"
         action
@@ -13,6 +13,9 @@ mixin formChangeMulti()
                     option(value="inactive") Dừng hoạt động
                     option(value="delete-all") Xóa tất cả
                     option(value="change-position") Thay đổi vị trí
+                    if(backup)
+                        option(value="change-status-delete") Thay đổi trạng thái
+                        option(value="delete-all-forever") Xóa tất cả vĩnh viễn
             .form-group 
                 input(
                     type="text"

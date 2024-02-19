@@ -36,6 +36,15 @@ router.patch(
 
 router.get('/detail/:id', controller.detailItem);
 
+router.get('/recycling-bin', controller.recyclingBin);
+router.patch(
+  '/recycling-bin/change-status-deleted/:id',
+  controller.changeStatusDelete
+);
+router.delete(
+  '/recycling-bin/delete-forever/:id',
+  controller.deleteItemForever
+);
 router.get('/backup-delete', controller.backupDelete);
 
 module.exports = router;

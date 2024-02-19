@@ -185,3 +185,43 @@ if (sort) {
     option.setAttribute('selected', true);
   }
 }
+
+const buttonChangeDelete = document.querySelectorAll('[button-change-delete]');
+if (buttonChangeDelete.length > 0) {
+  const formChangeDelete = document.querySelector('[form-change-delete]');
+  buttonChangeDelete.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const id = button.getAttribute('data-id');
+      const path = `${formChangeDelete.getAttribute(
+        'data-path'
+      )}/${id}?_method=PATCH`;
+      formChangeDelete.action = path;
+      formChangeDelete.submit();
+    });
+  });
+}
+
+const buttonDeleteForever = document.querySelectorAll(
+  '[button-delete-forever]'
+);
+if (buttonDeleteForever.length > 0) {
+  const formDeleteItemForever = document.querySelector(
+    '[form-delete-item-forever]'
+  );
+  buttonDeleteForever.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const id = button.getAttribute('data-id');
+      const title = button.getAttribute('data-title');
+      const isConfirm = confirm(
+        `Bạn chắc chắn muốn xóa luôn sản phẩm ${title}?`
+      );
+      if (isConfirm) {
+        const path = `${formDeleteItemForever.getAttribute(
+          'data-path'
+        )}/${id}?_method=DELETE`;
+        formDeleteItemForever.action = path;
+        formDeleteItemForever.submit();
+      }
+    });
+  });
+}
