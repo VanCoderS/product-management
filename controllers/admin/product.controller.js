@@ -128,9 +128,9 @@ module.exports.createItemPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
+  // if (req.file) {
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+  // }
 
   const product = new Product(req.body);
   product.save();
@@ -170,9 +170,9 @@ module.exports.editItemPatch = async (req, res) => {
     //   req.body.thumbnail = '';
     // }
 
-    if (req.file) {
-      req.body.thumbnail = `/uploads/${req.file.filename}`;
-    }
+    // if (req.file) {
+    //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // }
 
     console.log(req.body);
     await Product.updateOne({ _id: req.params.id }, req.body);
