@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const path = require('path');
 
 const database = require('./config/database');
 
@@ -23,6 +24,10 @@ app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
 
 app.use(express.static(`${__dirname}/public`));
+app.use(
+  '/tinymce',
+  express.static(path.join(__dirname, 'node_modules', 'tinymce'))
+);
 
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 

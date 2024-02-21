@@ -1,15 +1,14 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 block main 
-    +showAlertSuccess(5000)
     +showAlertError(5000)
 
-    h1.mb-4 Chỉnh sửa sản phẩm
+    h1.mb-4 Thêm mới danh mục
 
     form(
-        action=`${prefixAdmin}/products/edit/${product.id}?_method=PATCH`
+        action=`${prefixAdmin}/products-category/create`
         method="POST"
-        form-edit-product
+        form-create-product
         enctype="multipart/form-data"
     )
         .form-group 
@@ -19,7 +18,14 @@ block main
                 class="form-control"
                 id="title"
                 name="title"
-                value=product.title
+            ) 
+        .form-group 
+            label(for="parent-id") Danh mục cha
+            input(
+                type="text"
+                class="form-control"
+                id="parent-id"
+                name="parent-id"
             ) 
         .form-group 
             label(for="desc") Mô tả
@@ -29,36 +35,6 @@ block main
                 name="description"
                 rows="5"
                 textarea-mce 
-            ) #{product.description}
-        .form-group 
-            label(for="price") Giá
-            input(
-                type="number"
-                class="form-control"
-                id="price"
-                name="price"
-                min="0"
-                value=product.price
-            ) 
-        .form-group 
-            label(for="discount") % Giảm giá
-            input(
-                type="number"
-                class="form-control"
-                id="discount"
-                name="discountPercentage"
-                min="0"
-                value=product.discountPercentage
-            )
-        .form-group 
-            label(for="stock") Số lượng
-            input(
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                min="0"
-                value=product.stock
             )
         div(
             class="form-group"
@@ -71,11 +47,11 @@ block main
                 id="thumbnail"
                 name="thumbnail"
                 accept="image/*"
-                upload-image-input 
+                upload-image-input
             )
             .container-image-preview    
                 img(
-                    src=product.thumbnail
+                    src=""
                     alt=""
                     upload-image-preview 
                 )
@@ -88,8 +64,7 @@ block main
                 id="position"
                 name="position"
                 min="1"
-                placeholder="Vị trí mặc định"
-                value=product.position
+                placeholder="Tự động tăng"
             )
         .form-group.form-check.form-check-inline
             input(
@@ -98,7 +73,7 @@ block main
                 id="statusActive"
                 name="status"
                 value="active"
-                checked=(product.status === "active" ? true : false)
+                checked
             )
             label(for="statusActive" class="form-check-label") Hoạt động
         .form-group.form-check.form-check-inline
@@ -108,16 +83,10 @@ block main
                 id="statusInActive"
                 name="status"
                 value="inactive"
-                checked=(product.status === "inactive" ? true : false)
             )
             label(for="statusInActive" class="form-check-label") Dừng hoạt động
         .form-group 
             button(
                 type="submit"
                 class="btn btn-primary"
-            ) Cập nhật
-        
-    a(
-        href=`${prefixAdmin}/products/detail/${product.id}`
-        class="btn btn-secondary btn-sm"
-    ) Chi tiết
+            ) Tạo mới
