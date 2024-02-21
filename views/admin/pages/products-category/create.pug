@@ -1,5 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
 block main 
     +showAlertError(5000)
 
@@ -21,12 +23,14 @@ block main
             ) 
         .form-group 
             label(for="parent-id") Danh mục cha
-            input(
-                type="text"
+            select(
+                name="parent_id"
+                id="parent_id"
                 class="form-control"
-                id="parent-id"
-                name="parent-id"
-            ) 
+            )
+                option(value="") -- Chọn danh mục cha --
+                if(records)
+                    +selectTree(records) 
         .form-group 
             label(for="desc") Mô tả
             textarea(

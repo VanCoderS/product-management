@@ -22,17 +22,19 @@ if (buttonsChangeStatus.length > 0) {
 const buttonsDelete = document.querySelectorAll('[button-delete]');
 if (buttonsDelete.length > 0) {
   const formDeleteItem = document.querySelector('[form-delete-item]');
-  const path = formDeleteItem.getAttribute('data-path');
-  buttonsDelete.forEach((button) => {
-    button.addEventListener('click', (e) => {
-      const title = button.getAttribute('data-title');
-      const isConfirm = confirm(`Bạn có muốn xóa sản phẩm ${title}?`);
-      if (isConfirm) {
-        const id = button.getAttribute('data-id');
-        const action = `${path}/${id}?_method=DELETE`;
-        formDeleteItem.action = action;
-        formDeleteItem.submit();
-      }
+  if (formDeleteItem) {
+    const path = formDeleteItem.getAttribute('data-path');
+    buttonsDelete.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const title = button.getAttribute('data-title');
+        const isConfirm = confirm(`Bạn có muốn xóa sản phẩm ${title}?`);
+        if (isConfirm) {
+          const id = button.getAttribute('data-id');
+          const action = `${path}/${id}?_method=DELETE`;
+          formDeleteItem.action = action;
+          formDeleteItem.submit();
+        }
+      });
     });
-  });
+  }
 }
